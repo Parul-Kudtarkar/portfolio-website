@@ -142,7 +142,7 @@ In [Part 2: The Architecture, the Model and What It Can Do](/blog/understanding-
 - [6] Kelley DR et al. "Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks." Genome Research, 26(7), 990–999, 2016. https://doi.org/10.1101/gr.200535.115
 - [7] Avsec Ž et al. "Effective gene expression prediction from sequence by integrating long-range interactions." Nature Methods, 18, 1196–1203, 2021. https://doi.org/10.1038/s41592-021-01252-x
 - [8] Vaswani A et al. "Attention Is All You Need." NeurIPS, 2017. https://arxiv.org/abs/1706.03762
-- [9] Dalla-Torre I et al. "Advancing regulatory variant effect prediction with AlphaGenome." Nature, 2026 (Published 28 January 2026). https://doi.org/10.1038/s41586-025-10014-0`,
+- [9] Avsec Ž et al. "Advancing regulatory variant effect prediction with AlphaGenome." Nature, 2026 (Published 28 January 2026). https://doi.org/10.1038/s41586-025-10014-0`,
     readingTime: 12,
     featured: true,
   },

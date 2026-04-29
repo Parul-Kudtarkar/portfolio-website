@@ -195,4 +195,4 @@ pip install alphagenome-pytorch
 
 ## Citation
 
-Dalla-Torre I, et al. Advancing regulatory variant effect prediction with AlphaGenome. Nature. 2026. Published 28 January 2026. https://doi.org/10.1038/s41586-025-10014-0
+Avsec Ž, et al. Advancing regulatory variant effect prediction with AlphaGenome. Nature. 2026. Published 28 January 2026. https://doi.org/10.1038/s41586-025-10014-0

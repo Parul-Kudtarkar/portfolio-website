@@ -14,7 +14,7 @@ const references = [
   "Kim NW, et al. Specific association of human telomerase activity with immortal cells and cancer. Science. 1994;266(5193):2011–2015.",
   "Bell RJ, et al. The transcription factor GABPA is required for nuclear reprogramming and maintenance of the TERT promoter in melanoma. Mol Cell. 2015;57(5):807–818.",
   "Stern JL, et al. Mutation of the TERT promoter, switch to active chromatin and monoallelic TERT expression in multiple cancers. Genes Dev. 2015;29(21):2219–2224.",
-  "Dalla-Torre I, et al. Advancing regulatory variant effect prediction with AlphaGenome. Nature. 2026. Published 28 January 2026.",
+  "Avsec Ž, et al. Advancing regulatory variant effect prediction with AlphaGenome. Nature. 2026. Published 28 January 2026.",
   "Karczewski KJ, et al. The mutational constraint spectrum quantified from variation in 141,456 humans. Nature. 2020;581(7809):434–443.",
   "Clapier CR, Cairns BR. The biology of chromatin remodeling complexes. Annu Rev Biochem. 2009;78:273–304.",
   "Heintzman ND, et al. Distinct and predictive chromatin signatures of transcriptional promoters and enhancers in the human genome. Nat Genet. 2007;39(3):311–318.",
