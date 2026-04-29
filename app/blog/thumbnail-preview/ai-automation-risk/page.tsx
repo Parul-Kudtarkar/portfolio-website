@@ -2,7 +2,7 @@ import { AiAutomationRiskThumbnail } from "@/components/blog-thumbnails/ai-autom
 
 export default function ThumbnailPreviewPage() {
   return (
-    <main className="min-h-screen bg-white p-6">
+    <main className="min-h-screen bg-background p-6">
       <AiAutomationRiskThumbnail />
     </main>
   )

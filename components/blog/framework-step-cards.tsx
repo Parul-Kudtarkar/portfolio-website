@@ -14,13 +14,13 @@ const STEPS = [
   {
     num: 3,
     name: "Identify your irreplaceable layer.",
-    body: 'For each Human-led task: what makes this genuinely hard for AI? If the answer is "I have relationships," "I have domain judgment," or "someone is accountable" — that\'s your moat. Write it down. Invest in it deliberately.',
+    body: 'For each Human-led task: what makes this genuinely hard for AI? If the answer is "I have relationships," "I have domain judgment," or "someone is accountable", that\'s your moat. Write it down. Invest in it deliberately.',
     accent: "#8B5CF6",
   },
   {
     num: 4,
     name: "Build an augmentation habit, not a tool collection.",
-    body: "Pick one Augment-zone task and build a reliable AI workflow for it this month. Not to replace your judgment — to compress the time between task start and your judgment being applied. That's the productivity model that survives every wave of AI advancement.",
+    body: "Pick one Augment-zone task and build a reliable AI workflow for it this month. Not to replace your judgment, to compress the time between task start and your judgment being applied. That's the productivity model that survives every wave of AI advancement.",
     accent: "#F97316",
   },
 ]

@@ -15,7 +15,7 @@ export function HeadlineNumbersTable() {
     },
     {
       metric: "Life sciences share of Claude usage",
-      figure: "6.4% — 5th largest category",
+      figure: "6.4%, 5th largest category",
     },
   ]
 

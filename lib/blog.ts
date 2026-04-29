@@ -23,44 +23,44 @@ function readBlogMarkdown(fileName: string): string {
   return fs.readFileSync(absPath, "utf8")
 }
 
-// Sample blog posts - in production, you might load these from markdown files or a CMS
+// Sample blog posts, in production, you might load these from markdown files or a CMS
 export const blogPosts: BlogPost[] = [
   {
     slug: "understanding-alphagenome-part-1-biology-problem",
-    title: "Understanding AlphaGenome — Part 1: The Biology and the Problem",
+    title: "Understanding AlphaGenome, Part 1: The Biology and the Problem",
     description:
       "From a missing pancreas to cis-regulatory logic: why most disease variants sit outside genes and the range-versus-resolution problem AlphaGenome was built to solve.",
     date: "2026-03-27",
     author: "Parul Kudtarkar",
     category: "Genomics",
     tags: ["AlphaGenome", "Genomics", "Deep Learning", "Gene Regulation", "Transformers"],
-    content: `This is the first post in a three-part series on AlphaGenome. Part 1 lays the conceptual groundwork — the biology you need, the computational ideas behind it and the core tension the model was built to resolve. Part 2 walks through the AlphaGenome architecture itself. Part 3 shows you how to run it.
+    content: `This is the first post in a three-part series on AlphaGenome. Part 1 lays the conceptual groundwork, the biology you need, the computational ideas behind it and the core tension the model was built to resolve. Part 2 walks through the AlphaGenome architecture itself. Part 3 shows you how to run it.
 
 A baby was born with no functioning pancreas.
 Then another. Then another.
 Ten families, across multiple countries, presenting with the same devastating diagnosis: neonatal diabetes requiring insulin from birth, no exocrine pancreatic function, no explanation.[1] Researchers sequenced every gene. Every protein looked normal.
 The answer wasn't in a gene at all.
-A team led by researchers at the University of Exeter used epigenomic data from embryonic pancreatic progenitor cells to guide their search through whole genome sequences. What they found was a previously uncharacterized 400-base-pair stretch of DNA located 25,000 base pairs downstream of a gene called PTF1A - far outside any coding region. Six different mutations in that single small stretch were the most common cause of isolated pancreatic agenesis they had ever identified.
-The PTF1A gene itself was fine. The protein it makes was fine. But the regulatory switch - a tiny enhancer that told the developing embryo when and where to build a pancreas - was broken. One wrong letter was enough.
+A team led by researchers at the University of Exeter used epigenomic data from embryonic pancreatic progenitor cells to guide their search through whole genome sequences. What they found was a previously uncharacterized 400-base-pair stretch of DNA located 25,000 base pairs downstream of a gene called PTF1A, far outside any coding region. Six different mutations in that single small stretch were the most common cause of isolated pancreatic agenesis they had ever identified.
+The PTF1A gene itself was fine. The protein it makes was fine. But the regulatory switch, a tiny enhancer that told the developing embryo when and where to build a pancreas, was broken. One wrong letter was enough.
 That finding wasn't an anomaly. It turned out to be the rule.
 
-Today, we know that **the vast majority of disease-linked genetic variants don't sit inside genes.**[2][3] They sit in the spaces between them — in regions that don't encode any protein, that don't show up in a standard genetic test, that most models can't interpret at all.
+Today, we know that **the vast majority of disease-linked genetic variants don't sit inside genes.**[2][3] They sit in the spaces between them, in regions that don't encode any protein, that don't show up in a standard genetic test, that most models can't interpret at all.
 
 This is the problem AlphaGenome was built to solve. But to understand why it's so hard, you first need to understand how genes are actually controlled.
 
 ## The operating system running on your DNA
 
-Genes don't just switch themselves on. Something has to flip the switch. And those switches aren't the genes themselves — they're specialized DNA sequences scattered across the genome, often sitting far from the gene they control. They're called **cis-regulatory elements** and you can think of them as the operating system running on top of the genetic hardware.
+Genes don't just switch themselves on. Something has to flip the switch. And those switches aren't the genes themselves, they're specialized DNA sequences scattered across the genome, often sitting far from the gene they control. They're called **cis-regulatory elements** and you can think of them as the operating system running on top of the genetic hardware.
 
 The main types:
 
-- **Promoters** sit just upstream of a gene. They're the landing pad — the spot where the molecular machinery that "reads" a gene has to dock before it can start transcribing.
+- **Promoters** sit just upstream of a gene. They're the landing pad, the spot where the molecular machinery that "reads" a gene has to dock before it can start transcribing.
 - **Enhancers** are stranger. They can sit hundreds of thousands of base pairs away from the gene they control, looping through three-dimensional space[4] to touch the promoter and boost expression. An enhancer controlling a gene in your liver cells might be physically closer in space than it is along the linear genome.
-- **Silencers** do the opposite. They dampen expression — or shut it down entirely.
+- **Silencers** do the opposite. They dampen expression, or shut it down entirely.
 
-<figure class="my-8" style="max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;"><img src="/enhancer_promoter_looping_diagram.png" alt="Linear chromosome view with enhancer and promoter ~500 kb apart; 3D looping brings them together so a TF-bound enhancer activates the promoter and drives mRNA expression" class="w-full rounded-lg border border-border shadow-sm" style="max-width: 100%; width: 100%; display: block; height: auto;" /><figcaption class="text-center text-sm text-muted-foreground mt-3 max-w-2xl mx-auto">Linear distance vs. 3D chromatin looping: an enhancer and promoter can be hundreds of kilobases apart on the sequence yet close in the nucleus—so a SNP in a TF binding motif can silence a gene without touching its coding sequence.</figcaption></figure>
+<figure class="my-8" style="max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;"><img src="/enhancer_promoter_looping_diagram.png" alt="Linear chromosome view with enhancer and promoter ~500 kb apart; 3D looping brings them together so a TF-bound enhancer activates the promoter and drives mRNA expression" class="w-full rounded-lg border border-border shadow-sm" style="max-width: 100%; width: 100%; display: block; height: auto;" /><figcaption class="text-center text-sm text-muted-foreground mt-3 max-w-2xl mx-auto">Linear distance vs. 3D chromatin looping: an enhancer and promoter can be hundreds of kilobases apart on the sequence yet close in the nucleus-so a SNP in a TF binding motif can silence a gene without touching its coding sequence.</figcaption></figure>
 
-The proteins that actually bind to these regulatory sequences are called **transcription factors**. Each one recognizes a short, specific stretch of DNA — typically 6 to 20 base pairs long.[5] When a transcription factor finds its motif, it binds. When it binds, it either recruits the transcription machinery or repels it.
+The proteins that actually bind to these regulatory sequences are called **transcription factors**. Each one recognizes a short, specific stretch of DNA, typically 6 to 20 base pairs long.[5] When a transcription factor finds its motif, it binds. When it binds, it either recruits the transcription machinery or repels it.
 
 Now here's the part that matters for disease.
 
@@ -68,7 +68,7 @@ Now here's the part that matters for disease.
 
 That's enough to cause disease.
 
-This is why studying the regulatory genome matters as much as studying genes themselves. And it's exactly the problem every genomics model has struggled to crack — because cracking it requires holding two things in your head at once that seem fundamentally incompatible.
+This is why studying the regulatory genome matters as much as studying genes themselves. And it's exactly the problem every genomics model has struggled to crack, because cracking it requires holding two things in your head at once that seem fundamentally incompatible.
 
 ## The tension that broke every previous model
 
@@ -82,7 +82,7 @@ The problem: longer sequences at finer resolution means exponentially more compu
 
 **Wide window, coarse resolution.** Or **fine resolution, tiny window.**
 
-Neither could do what you actually need — see a 500 kb regulatory landscape and resolve a 6 bp binding motif simultaneously.
+Neither could do what you actually need, see a 500 kb regulatory landscape and resolve a 6 bp binding motif simultaneously.
 
 AlphaGenome's central contribution is solving that tradeoff. But before we get into how (that's Part 2), it helps to understand the two computational ideas it's built from. Because understanding those ideas is what makes the architecture feel inevitable rather than arbitrary.
 
@@ -90,19 +90,19 @@ AlphaGenome's central contribution is solving that tradeoff. But before we get i
 
 Think about what a transcription factor actually does.
 
-It doesn't read the whole genome at once. It diffuses along the DNA, sampling short stretches, lighting up when it finds its specific motif. It's a pattern detector — local, precise, blind to anything outside its small window.
+It doesn't read the whole genome at once. It diffuses along the DNA, sampling short stretches, lighting up when it finds its specific motif. It's a pattern detector, local, precise, blind to anything outside its small window.
 
 A convolutional neural network filter works the same way.[6]
 
-It slides a small window across the sequence, computing a score at each position. High score means the pattern is there. Low score means it's not. The output — one score per position — is called a **feature map**. And instead of one filter looking for one pattern, a CNN runs hundreds of them in parallel, each learning a different motif from the data.
+It slides a small window across the sequence, computing a score at each position. High score means the pattern is there. Low score means it's not. The output, one score per position, is called a **feature map**. And instead of one filter looking for one pattern, a CNN runs hundreds of them in parallel, each learning a different motif from the data.
 
 __CNN_DNA_ANIM__
 
-Some end up resembling known transcription factor binding sites.[7] Some capture splice sites — the exact base pairs where an exon ends and an intron begins. Some find patterns that biologists haven't formally named yet.
+Some end up resembling known transcription factor binding sites.[7] Some capture splice sites, the exact base pairs where an exon ends and an intron begins. Some find patterns that biologists haven't formally named yet.
 
 What makes stacked CNN layers powerful is that each layer reads the output of the previous one.
 
-The first layer detects atomic patterns in raw DNA — a TATA box, a splice donor signal, a CTCF motif. The second layer detects combinations: a TATA box plus an initiator element at the right spacing. Later layers can detect higher-order structure — a dense cluster of TF motifs that looks like an active enhancer, or a CTCF site marking a chromatin domain boundary.
+The first layer detects atomic patterns in raw DNA, a TATA box, a splice donor signal, a CTCF motif. The second layer detects combinations: a TATA box plus an initiator element at the right spacing. Later layers can detect higher-order structure, a dense cluster of TF motifs that looks like an active enhancer, or a CTCF site marking a chromatin domain boundary.
 
 By the time the sequence passes through several CNN layers, each position is no longer represented as a simple A, C, G, or T. It carries a rich vector of scores answering questions like: *How enhancer-like is the local sequence? Is there a splice site here? A CTCF boundary signal?*
 
@@ -114,23 +114,23 @@ A CNN filter only sees a short window at a time. It can tell you what's happenin
 
 A transformer's core mechanism is called **self-attention**. Here's the intuition.
 
-Every position in the sequence simultaneously generates three things: a question ("what am I looking for?"), a label ("what do I contain?") and a message ("what do I broadcast if someone's interested?").[8] The model then computes a score between every pair of positions. High score means high attention — one position actively incorporating another's information into its own representation.
+Every position in the sequence simultaneously generates three things: a question ("what am I looking for?"), a label ("what do I contain?") and a message ("what do I broadcast if someone's interested?").[8] The model then computes a score between every pair of positions. High score means high attention, one position actively incorporating another's information into its own representation.
 
 <figure class="not-prose my-8 w-full max-w-none" style="width: 100%; margin-left: 0; margin-right: 0;"><img src="/transformer_attention_genomic.png" alt="Positions after CNN compression: enhancer and promoter nodes; arcs from promoter to other positions with thick arc to enhancer indicating strong regulatory attention; Query, Key, Value definitions; output as weighted sum of values" class="w-full max-w-none rounded-lg border border-border shadow-sm" style="width: 100%; max-width: none; display: block; height: auto;" /><figcaption class="mx-auto mt-3 w-full max-w-none text-center text-sm text-muted-foreground">Self-attention after CNN compression: the promoter position attends most strongly to the distal enhancer (line thickness = attention weight). Each position carries Query, Key and Value; outputs are weighted sums of Values.</figcaption></figure>
 
-In genomic terms: this is what lets a promoter "attend to" an enhancer 400 kb away and incorporate its regulatory signal. The model learns which positions are functionally related based purely on patterns in the data — no hard-coded rules about which regulatory elements talk to which.
+In genomic terms: this is what lets a promoter "attend to" an enhancer 400 kb away and incorporate its regulatory signal. The model learns which positions are functionally related based purely on patterns in the data, no hard-coded rules about which regulatory elements talk to which.
 
 The limitation is cost. Attention scales quadratically with sequence length. Double the sequence, quadruple the computation. At nucleotide resolution across 1 million base pairs, a transformer running directly is simply not feasible.[7][8]
 
 So you can't just bolt a transformer onto the end of a CNN and call it done.
 
-The architectural insight is how you combine them — and that's exactly where AlphaGenome does something novel.
+The architectural insight is how you combine them and that's exactly where AlphaGenome does something novel.
 
 ## What comes next
 
 Two building blocks. One fundamental tension. And a model that, on paper, shouldn't be able to do what it does.
 
-In [Part 2: The Architecture, the Model, and What It Can Do](/blog/understanding-alphagenome-part-2-architecture), we walk through the U-Net architecture that lets AlphaGenome process 1 million base pairs at single-nucleotide resolution[9] — why the compress-then-expand structure is the key insight, how skip connections recover fine-grained detail that would otherwise be lost and what the model's 5,930 output tracks[9] actually predict.
+In [Part 2: The Architecture, the Model and What It Can Do](/blog/understanding-alphagenome-part-2-architecture), we walk through the U-Net architecture that lets AlphaGenome process 1 million base pairs at single-nucleotide resolution[9], why the compress-then-expand structure is the key insight, how skip connections recover fine-grained detail that would otherwise be lost and what the model's 5,930 output tracks[9] actually predict.
 
 ## References
 
@@ -142,15 +142,15 @@ In [Part 2: The Architecture, the Model, and What It Can Do](/blog/understanding
 - [6] Kelley DR et al. "Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks." Genome Research, 26(7), 990–999, 2016. https://doi.org/10.1101/gr.200535.115
 - [7] Avsec Ž et al. "Effective gene expression prediction from sequence by integrating long-range interactions." Nature Methods, 18, 1196–1203, 2021. https://doi.org/10.1038/s41592-021-01252-x
 - [8] Vaswani A et al. "Attention Is All You Need." NeurIPS, 2017. https://arxiv.org/abs/1706.03762
-- [9] Avsec Ž et al. "Advancing regulatory variant effect prediction with AlphaGenome." Nature, 2026. https://doi.org/10.1038/s41586-025-10014-0`,
+- [9] Dalla-Torre I et al. "Advancing regulatory variant effect prediction with AlphaGenome." Nature, 2026 (Published 28 January 2026). https://doi.org/10.1038/s41586-025-10014-0`,
     readingTime: 12,
     featured: true,
   },
   {
     slug: "understanding-alphagenome-part-2-architecture",
-    title: "Understanding AlphaGenome — Part 2: The Architecture, The Model, and What It Can Do",
+    title: "Understanding AlphaGenome, Part 2: The Architecture, The Model and What It Can Do",
     description:
-      "U-Net DNA, teacher–student distillation, 5,930 tracks, GWAS to T-ALL: how AlphaGenome compresses a megabase, attends globally and scores variants — plus how to run it.",
+      "U-Net DNA, teacher–student distillation, 5,930 tracks, GWAS to T-ALL: how AlphaGenome compresses a megabase, attends globally and scores variants, plus how to run it.",
     date: "2026-03-28",
     author: "Parul Kudtarkar",
     category: "Genomics",
@@ -159,6 +159,36 @@ In [Part 2: The Architecture, the Model, and What It Can Do](/blog/understanding
     hideHeroImage: true,
     content: readBlogMarkdown("understanding-alphagenome-part-2.md"),
     readingTime: 18,
+    featured: true,
+  },
+  {
+    slug: "tert-promoter-alphagenome",
+    title: "How a Single DNA Letter Change Switches On Cancer's Immortality Engine",
+    description:
+      "A deep-dive into TERT promoter mutations using AlphaGenome to reconstruct chromatin, TF binding and transcriptional effects from sequence alone.",
+    date: "2026-04-22",
+    author: "Parul Kudtarkar",
+    category: "Genomics",
+    tags: ["AlphaGenome", "Genomics", "Cancer", "TERT", "Variant interpretation"],
+    image: "/images/tert-alphageome/fig1b_tert_motif_diagram.png",
+    hideHeroImage: true,
+    content: readBlogMarkdown("tert-promoter-alphagenome.md"),
+    readingTime: 14,
+    featured: true,
+  },
+  {
+    slug: "tert-alphagenome-notebook-walkthrough",
+    title: "TERT AlphaGenome Analysis: A Notebook Walkthrough",
+    description:
+      "Methods companion to the TERT promoter post: notebook setup, gnomAD control selection, model choice, AlphaGenome API calls, score_variant caveats and evaluation against published biology.",
+    date: "2026-04-23",
+    author: "Parul Kudtarkar",
+    category: "Genomics",
+    tags: ["AlphaGenome", "Genomics", "TERT", "Python", "Variant interpretation"],
+    image: "/images/tert-alphageome/fig5b_modality_heatmap.png",
+    hideHeroImage: true,
+    content: readBlogMarkdown("tert-alphagenome-notebook-walkthrough.md"),
+    readingTime: 30,
     featured: true,
   },
   {
@@ -179,7 +209,7 @@ In [Part 2: The Architecture, the Model, and What It Can Do](/blog/understanding
   {
     slug: "essential-toolkit-building-ai-agents-2026",
     title: "The Essential Toolkit for Building AI Agents in 2026",
-    description: "What I learned building agents for the past two years. A practical guide to the frameworks, tools, and patterns that actually work.",
+    description: "What I learned building agents for the past two years. A practical guide to the frameworks, tools and patterns that actually work.",
     date: "2026-01-08",
     author: "Parul Kudtarkar",
     category: "AI",
@@ -190,17 +220,17 @@ In [Part 2: The Architecture, the Model, and What It Can Do](/blog/understanding
 
 Two years ago, a friend introduced me to LangChain. I was immediately hooked; here was a framework that let LLMs do things they couldn't do on their own. Live web search. Calling external tools. Querying databases. Back then, LLMs were just text completion engines. LangChain opened up a whole new world of possibilities.
 
-I dove in deep. Took a comprehensive course, spent weeks in the documentation, and most importantly, kept building. From simple document Q&A bots to complex research agents navigating knowledge graphs.
+I dove in deep. Took a comprehensive course, spent weeks in the documentation and most importantly, kept building. From simple document Q&A bots to complex research agents navigating knowledge graphs.
 
-Here's what I've learned works, what doesn't, and what you actually need to know.
+Here's what I've learned works, what doesn't and what you actually need to know.
 
 ## **The foundation: Frameworks**
 
 ### **LangChain: Where I started (and where you should too)**
 
-The course I took walked through building agents at every level of sophistication. But the real learning came from building projects where I needed agents to orchestrate database queries, web searches, and data validation in complex workflows.
+The course I took walked through building agents at every level of sophistication. But the real learning came from building projects where I needed agents to orchestrate database queries, web searches and data validation in complex workflows.
 
-Here's what I learned: LangChain is the React of AI development—opinionated, occasionally frustrating, but ultimately the right choice because the ecosystem has converged around it.
+Here's what I learned: LangChain is the React of AI development-opinionated, occasionally frustrating, but ultimately the right choice because the ecosystem has converged around it.
 
 **What it actually does:**
 
@@ -318,7 +348,7 @@ results = vectorstore.similarity_search(
 
 Your agent needs current information. Stock prices, news, API docs that changed yesterday, research papers published last week.
 
-**What makes it different:** Traditional search APIs return raw HTML. Tavily returns content already cleaned and formatted for LLMs—no ads, no navigation, just the content your agent needs.
+**What makes it different:** Traditional search APIs return raw HTML. Tavily returns content already cleaned and formatted for LLMs-no ads, no navigation, just the content your agent needs.
 
 \`\`\`python
 
@@ -344,7 +374,7 @@ response = tavily.search(
 
 ### **Neo4j: When relationships matter**
 
-For some problems, data isn't just documents—it's entities and relationships. That's where graph databases shine.
+For some problems, data isn't just documents-it's entities and relationships. That's where graph databases shine.
 
 **When you need it:** When your data is naturally relational and you need to traverse connections. Not for simple document search; use vector databases for that.
 
@@ -384,11 +414,11 @@ sanitized_output, is_safe = scan_output(llm_response)
 
 ## **A real example: Building a biomedical research platform**
 
-Let me show you what these tools look like working together. I built a platform for biomedical research that helps navigate complex relationships in scientific data—the kind of problem where entities (genes, diseases, drugs, variants) are all interconnected.
+Let me show you what these tools look like working together. I built a platform for biomedical research that helps navigate complex relationships in scientific data-the kind of problem where entities (genes, diseases, drugs, variants) are all interconnected.
 
 **The technical challenge:**  
 
-Users needed to ask complex questions that required traversing multiple relationships: "If variant X affects gene Y, and gene Y is in pathway Z, what drugs target that pathway?"
+Users needed to ask complex questions that required traversing multiple relationships: "If variant X affects gene Y and gene Y is in pathway Z, what drugs target that pathway?"
 
 This isn't a simple document search. It's multi-hop reasoning across connected data.
 
@@ -446,7 +476,7 @@ result = GenePathway.model_validate(neo4j_response)
 
 \`\`\`
 
-This catches data issues early—critical when dealing with scientific data.
+This catches data issues early-critical when dealing with scientific data.
 
 **LangSmith for debugging:**  
 
@@ -462,7 +492,7 @@ With multi-step workflows hitting multiple systems, debugging was brutal initial
 
 **What this demonstrates:**  
 
-Your application will look different—maybe you're building a legal research tool, a customer support system, or something else entirely. But the patterns are similar: complex data relationships, multi-step reasoning, validation against external sources.
+Your application will look different-maybe you're building a legal research tool, a customer support system, or something else entirely. But the patterns are similar: complex data relationships, multi-step reasoning, validation against external sources.
 
 ## **The golden rule**
 
@@ -492,7 +522,7 @@ Start simple. Build something that works. Get it in front of users. Learn what b
   {
     slug: "welcome-to-my-blog",
     title: "Welcome to My Blog",
-    description: "I'm excited to share insights about AI, genomics, and research. This is the beginning of a journey to document my learnings and discoveries.",
+    description: "I'm excited to share insights about AI, genomics and research. This is the beginning of a journey to document my learnings and discoveries.",
     date: "2026-01-08",
     author: "Parul Kudtarkar",
     category: "General",

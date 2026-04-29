@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Script from 'next/script'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -9,7 +10,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 // Set NEXT_PUBLIC_SITE_URL in GitHub Actions (repo variable SITE_URL) or .env to your custom domain (e.g. Google/Squarespace)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://parulkudtarkar.com'
 
-const defaultTitle = 'Parul Kudtarkar - ML & Genomics Researcher'
+const defaultTitle = 'Parul Kudtarkar · ML & Genomics Researcher'
 const defaultDescription =
   'Harvard, Caltech & UCSD trained AI/genomics researcher. Led $12.5M NIH diabetes project, 15+ publications, pioneer in metabolic disease research & drug discovery.'
 
@@ -56,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* GitHub Pages cannot set HTTP headers; these meta tags provide equivalent protection where supported */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
@@ -64,11 +65,19 @@ export default function RootLayout({
         <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
       </head>
       <body className={`font-sans antialiased`}>
-        <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
-          <div className="site-ambient-mesh" />
-          <div className="site-ambient-noise" />
-        </div>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          storageKey="parul-kudtarkar-theme"
+          disableTransitionOnChange
+        >
+          <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
+            <div className="site-ambient-mesh" />
+            <div className="site-ambient-noise" />
+          </div>
+          {children}
+        </ThemeProvider>
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>
             <Script

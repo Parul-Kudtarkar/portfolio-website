@@ -9,6 +9,11 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BlogCodeBlockWrapper } from "@/components/blog-code-block-wrapper"
 import { CnnDnaAnimation } from "@/components/blog/cnn-dna-animation"
+import TrackToggle from "@/components/TrackToggle"
+import TERTPromoterAnimation from "@/components/TERTPromoterAnimation"
+import ModelComparisonTable from "@/components/ModelComparisonTable"
+import SuitabilityChecklist from "@/components/SuitabilityChecklist"
+import ReferenceList from "@/components/ReferenceList"
 import type { ReactNode } from "react"
 import { Calendar, Clock, ArrowLeft, Tag, Headphones } from "lucide-react"
 import { format } from "date-fns"
@@ -66,23 +71,75 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const CNN_DNA_ANIM_MARKER = "__CNN_DNA_ANIM__"
+  const TERT_PROMOTER_ANIM_MARKER = "__TERT_PROMOTER_ANIMATION__"
+  const MODEL_COMPARISON_TABLE_MARKER = "__MODEL_COMPARISON_TABLE__"
+  const SUITABILITY_CHECKLIST_MARKER = "__SUITABILITY_CHECKLIST__"
+  const EMBED_REGEX = /__CNN_DNA_ANIM__|__TERT_PROMOTER_ANIMATION__|__MODEL_COMPARISON_TABLE__|__SUITABILITY_CHECKLIST__|__TRACK_TOGGLE__\(\s*([^,\n]+)\s*,\s*([^)]+)\)/g
+
+  const stripWrappingQuotes = (value: string): string => {
+    const trimmed = value.trim()
+    if (
+      (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+      (trimmed.startsWith("'") && trimmed.endsWith("'"))
+    ) {
+      return trimmed.slice(1, -1)
+    }
+    return trimmed
+  }
 
   let articleBody: ReactNode
   if (post.slug === "ai-task-augmentation") {
     articleBody = <AiAugmentationArticleBody content={post.content} />
-  } else if (post.content.includes(CNN_DNA_ANIM_MARKER)) {
-    const [before, after] = post.content.split(CNN_DNA_ANIM_MARKER, 2)
-    const [htmlBefore, htmlAfter] = await Promise.all([
-      formatBlogMarkdown(before),
-      formatBlogMarkdown(after),
-    ])
-    articleBody = (
-      <>
-        <BlogCodeBlockWrapper html={htmlBefore} />
-        <CnnDnaAnimation />
-        <BlogCodeBlockWrapper html={htmlAfter} />
-      </>
-    )
+  } else if (EMBED_REGEX.test(post.content)) {
+    EMBED_REGEX.lastIndex = 0
+
+    const nodes: ReactNode[] = []
+    let scanPos = 0
+    let idx = 0
+    let match: RegExpExecArray | null
+
+    while ((match = EMBED_REGEX.exec(post.content)) !== null) {
+      const matchedText = match[0]
+      const start = match.index
+      const before = post.content.slice(scanPos, start)
+
+      if (before.trim().length > 0) {
+        const htmlBefore = await formatBlogMarkdown(before)
+        nodes.push(<BlogCodeBlockWrapper key={`md-${idx}`} html={htmlBefore} />)
+        idx++
+      }
+
+      if (matchedText === CNN_DNA_ANIM_MARKER) {
+        nodes.push(<CnnDnaAnimation key={`cnn-${idx}`} />)
+      } else if (matchedText === TERT_PROMOTER_ANIM_MARKER) {
+        nodes.push(<TERTPromoterAnimation key={`tert-promoter-${idx}`} />)
+      } else if (matchedText === MODEL_COMPARISON_TABLE_MARKER) {
+        nodes.push(<ModelComparisonTable key={`model-comparison-${idx}`} />)
+      } else if (matchedText === SUITABILITY_CHECKLIST_MARKER) {
+        nodes.push(<SuitabilityChecklist key={`suitability-checklist-${idx}`} />)
+      } else {
+        const referenceImage = stripWrappingQuotes(match[1] ?? "")
+        const mutantImage = stripWrappingQuotes(match[2] ?? "")
+        nodes.push(
+          <TrackToggle
+            key={`toggle-${idx}`}
+            referenceImage={referenceImage}
+            mutantImage={mutantImage}
+          />
+        )
+      }
+
+      idx++
+      scanPos = start + matchedText.length
+    }
+
+    const tail = post.content.slice(scanPos)
+    if (tail.trim().length > 0) {
+      const htmlTail = await formatBlogMarkdown(tail)
+      nodes.push(<BlogCodeBlockWrapper key={`md-tail-${idx}`} html={htmlTail} />)
+    }
+
+    articleBody = <>{nodes}</>
   } else {
     articleBody = (
       <BlogCodeBlockWrapper html={await formatBlogMarkdown(post.content)} />
@@ -159,7 +216,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         )}
 
-        {/* Audio Player — listen to the article */}
+        {/* Audio Player, listen to the article */}
         {post.audioUrl && (
           <div className="mb-8 p-5 bg-muted/80 rounded-xl border border-border shadow-sm">
             <div className="flex items-center gap-3 mb-4">
@@ -199,6 +256,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           }
         >
           {articleBody}
+          {post.slug === "tert-promoter-alphagenome" && <ReferenceList />}
         </div>
 
         {/* Footer Navigation */}

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils"
 
 /**
- * CNN sliding filter over DNA — colors: enhancer #E91E8C, promoter #F5A623,
+ * CNN sliding filter over DNA, colors: enhancer #E91E8C, promoter #F5A623,
  * TF #8B5CF6, DNA backbone #4A7FD4
  */
 const C = {
@@ -92,7 +92,7 @@ export function CnnDnaAnimation({
                   boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                 }}
               >
-                High activation — TATA motif detected
+                High activation, TATA motif detected
               </div>
             </div>
           </div>

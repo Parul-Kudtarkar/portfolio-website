@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Apple's iconic color palette - pure whites, system grays, and deep blacks */
+  /* Apple's iconic color palette, pure whites, system grays, and deep blacks */
   --background: oklch(0.99 0 0); /* Apple white */
   --foreground: oklch(0.08 0 0); /* Deep black */
   --card: oklch(0.98 0 0); /* Off-white */
@@ -103,8 +103,8 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius), 4px);
+  --radius-md: calc(var(--radius), 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--sidebar);
@@ -157,7 +157,7 @@ html.dark .site-ambient-mesh {
   background-attachment: fixed;
 }
 
-/* Subtle film grain (SVG feTurbulence) — “liquid glass” depth; remove if too busy */
+/* Subtle film grain (SVG feTurbulence), “liquid glass” depth; remove if too busy */
 .site-ambient-noise {
   position: absolute;
   inset: 0;
@@ -350,7 +350,18 @@ html.dark .site-ambient-noise {
     border-color: rgba(0, 0, 0, 0.24);
   }
 
-  /* Pills / badges — sitewide visibility + Apple-style */
+  html.dark .btn-glass {
+    background: oklch(0.22 0 0);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #f5f5f7;
+  }
+
+  html.dark .btn-glass:hover {
+    background: oklch(0.28 0 0);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  /* Pills / badges, sitewide visibility + Apple-style */
   [data-slot="badge"] {
     background: #f5f5f7;
     color: #1d1d1f;
@@ -378,6 +389,26 @@ html.dark .site-ambient-noise {
   [data-slot="badge"].bg-primary:hover {
     background: #1d1d1f;
     border-color: transparent;
+  }
+
+  html.dark [data-slot="badge"] {
+    background: oklch(0.24 0 0);
+    color: #f5f5f7;
+    border-color: oklch(0.32 0 0);
+  }
+
+  html.dark [data-slot="badge"]:hover {
+    background: oklch(0.3 0 0);
+    border-color: oklch(0.4 0 0);
+  }
+
+  html.dark [data-slot="badge"].bg-primary {
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+
+  html.dark [data-slot="badge"].bg-primary:hover {
+    background: #f5f5f7;
   }
 
   @media (prefers-reduced-transparency: reduce) {
@@ -419,9 +450,17 @@ main > section.container.max-w-6xl > div.mb-12.text-center {
   margin-bottom: 32px;
 }
 
+html.dark main > section.container.max-w-6xl > div.mb-12.text-center {
+  border-bottom-color: #424245;
+}
+
 main > section.container.max-w-6xl > div.grid.gap-6 {
   background: #ffffff;
   padding-top: 48px;
+}
+
+html.dark main > section.container.max-w-6xl > div.grid.gap-6 {
+  background: oklch(0.14 0.01 265);
 }
 
 /* Site typography tokens (unified headings + body) */
@@ -574,6 +613,11 @@ article .prose.prose-lg {
 /* Blog content styling (markdown inside article) */
 .blog-content {
   @apply text-foreground;
+}
+
+/* First block after page header, avoid stacked section top margins */
+.blog-content > :first-child:is(h1, h2, h3) {
+  margin-top: 0;
 }
 
 .blog-content h1 {
@@ -776,6 +820,16 @@ article .prose.prose-lg {
   color: #f5f5f7;
 }
 
+/* Match base rules above, prose-lg selectors are more specific */
+.prose-lg .blog-content > :first-child:is(h1, h2, h3) {
+  margin-top: 0;
+}
+
+.prose-lg .blog-content hr + h2,
+.prose-lg .blog-content hr + h3 {
+  margin-top: 1.25rem;
+}
+
 /* Shiki code blocks + copy button wrapper */
 .blog-code-block {
   @apply mb-2 overflow-hidden rounded-lg;
@@ -803,6 +857,27 @@ article .prose.prose-lg {
 
 .dark .blog-content blockquote {
   color: #f5f5f7;
+}
+
+.blog-content hr {
+  margin: 1rem auto;
+  max-width: 680px;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Horizontal rule + next heading: avoid doubling hr margin with h2/h3 top margin */
+.blog-content hr + h2,
+.blog-content hr + h3 {
+  margin-top: 1.25rem;
+}
+
+.blog-content p:empty {
+  display: none;
+}
+
+.blog-content > :last-child {
+  margin-bottom: 0 !important;
 }
 
 .blog-content :where(table) {
@@ -980,6 +1055,39 @@ audio::-webkit-media-controls-play-button {
 
 .blog-apple-slot {
   max-width: 100%;
+}
+
+html.dark .blog-apple-article {
+  color: #f5f5f7;
+}
+
+html.dark .blog-apple-markdown :where(p, li, h1, h2, h3, h4, blockquote, strong, td) {
+  color: #f5f5f7;
+}
+
+html.dark .blog-apple-markdown :where(a) {
+  color: oklch(0.78 0.12 250);
+}
+
+html.dark .blog-apple-markdown :where(a:hover) {
+  color: oklch(0.85 0.1 250);
+}
+
+html.dark .blog-apple-markdown :where(table) {
+  border-color: var(--border);
+}
+
+html.dark .blog-apple-markdown :where(th, td) {
+  border-bottom-color: var(--border);
+}
+
+html.dark .blog-apple-markdown :where(th) {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+html.dark .blog-apple-markdown :where(blockquote) {
+  border-left-color: var(--border);
 }
 
 /* CNN-on-DNA blog animation (Understanding AlphaGenome Part 1) */

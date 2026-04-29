@@ -1,4 +1,4 @@
-/** Stat cards for “Headline findings” — static UI (no Chart.js). */
+/** Stat cards for “Headline findings”, static UI (no Chart.js). */
 export function HeadlineFindingStats() {
   const cards = [
     {

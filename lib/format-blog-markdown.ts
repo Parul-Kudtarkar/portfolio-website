@@ -1,4 +1,6 @@
 import { highlightCode } from "@/lib/shiki"
+// NOTE: We intentionally do not use react-dom/server here.
+// Turbopack disallows importing react-dom/server from non-React modules like this formatter.
 
 // Allow only safe URL schemes to prevent XSS
 export function isSafeHref(url: string): boolean {
@@ -23,8 +25,31 @@ export function escapeHtml(unsafe: string): string {
 
 /** Markdown-like formatting with Shiki syntax highlighting for code blocks */
 export async function formatBlogMarkdown(content: string): Promise<string> {
+  // Support inline React-style citation tags inside blog markdown content.
+  // Example: <Citation numbers={[1]} />
+  content = content.replace(
+    /<Citation\s+numbers=\{\[([^\]]+)\]\}\s*\/>/g,
+    (_match, nums: string) => {
+      const numbers = nums
+        .split(",")
+        .map((s) => Number.parseInt(s.trim(), 10))
+        .filter((n) => Number.isFinite(n))
+
+      return numbers
+        .map((n, i) => {
+          const href = `#ref-${n}`
+          const id = `cite-${n}`
+          // Keep markup aligned with components/Citation.tsx
+          return `<sup><a href="${href}" id="${id}" class="text-blue-600 hover:underline no-underline mx-0.5">[${n}]</a>${i < numbers.length - 1 ? "" : ""}</sup>`
+        })
+        .join("")
+    }
+  )
+
   function processInlineMarkdown(text: string): string {
     let processed = text
+    const imageTokens: string[] = []
+
     processed = processed.replace(/\\\*/g, "*")
     processed = processed.replace(/\\\[/g, "[")
     processed = processed.replace(/\\\]/g, "]")
@@ -32,18 +57,23 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
     processed = processed.replace(/\\\)/g, ")")
     processed = processed.replace(/\\`/g, "`")
 
+    // Protect image markdown first so later emphasis parsing
+    // does not corrupt file names containing underscores.
     processed = processed.replace(
       /!\[([^\]]*)\]\(([^)]+)\)/g,
       (_match, alt: string, href: string) => {
         const safeHref = isSafeHref(href) ? href : "#"
         const safeAlt = escapeHtml(alt)
-        return `<img src="${escapeHtml(safeHref)}" alt="${safeAlt}" class="w-full max-w-2xl rounded-lg border border-border shadow-sm my-6 mx-auto block" loading="lazy" />`
+        const token = `@@IMGTOKEN${imageTokens.length}@@`
+        imageTokens.push(
+          `<img src="${escapeHtml(safeHref)}" alt="${safeAlt}" class="w-full max-w-2xl rounded-lg border border-border shadow-sm my-6 mx-auto block" loading="lazy" />`
+        )
+        return token
       }
     )
 
     processed = processed.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     processed = processed.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>")
-    processed = processed.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, "<em>$1</em>")
     processed = processed.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
       (_, linkText: string, href: string) => {
@@ -57,6 +87,10 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
       (_, code: string) =>
         `<code class="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">${escapeHtml(code)}</code>`
     )
+
+    processed = processed.replace(/@@IMGTOKEN(\d+)@@/g, (_m, idx: string) => {
+      return imageTokens[Number(idx)] ?? _m
+    })
 
     return processed
   }
@@ -118,6 +152,11 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
       continue
     }
 
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
+      result.push(`<hr class="my-8 border-border" />`)
+      continue
+    }
+
     if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
       const listText = processInlineMarkdown(trimmed.substring(2))
       result.push(`<li class="mb-1">${listText}</li>`)
@@ -140,6 +179,11 @@ export async function formatBlogMarkdown(content: string): Promise<string> {
       trimmed.startsWith("</figure")
     ) {
       result.push(trimmed)
+      continue
+    }
+
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(trimmed)) {
+      result.push(processInlineMarkdown(trimmed))
       continue
     }
 

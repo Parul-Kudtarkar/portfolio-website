@@ -10,7 +10,7 @@ const ROWS: Row[] = [
   {
     role: "Plumber / Electrician",
     exposure: "Near zero",
-    risk: "Very low — physical dexterity, embodied judgment",
+    risk: "Very low, physical dexterity, embodied judgment",
     moat: "Irreplaceable in physical world",
     verdict: "Very safe. Automate admin layer (quoting, scheduling, invoicing).",
   },
