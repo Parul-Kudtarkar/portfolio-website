@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <p className="text-sm text-muted-foreground">© 2025 Parul Kudtarkar | All rights reserved</p>
+            <p className="text-sm text-muted-foreground">© 2026 Parul Kudtarkar | All rights reserved</p>
             <Link
               href="https://sortingmydna.com"
               target="_blank"

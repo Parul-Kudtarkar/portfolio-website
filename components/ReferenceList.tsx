@@ -11,7 +11,7 @@ const references = [
   "Nakamura TM, et al. Telomerase catalytic subunit homologs from fission yeast and human. Science. 1997;277(5328):955–959.",
   "Shay JW, Wright WE. Telomeres and telomerase: three decades of progress. Nat Rev Genet. 2019;20(5):299–309.",
   "Akincilar SC, Unal B, Tergaonkar V. Reactivation of telomerase in cancer. Cell Mol Life Sci. 2016;73(8):1659–1670.",
-  "Kim NW, et al. Specific association of human telomerase activity with immortal cells and cancer. Science. 1994;266(5193):2011–2015.",
+  "Bell RJ, et al. The transcription factor GABP selectively binds and activates the mutant TERT promoter in cancer. Science. 2015;348(6238):1036–1039.",
   "Bell RJ, et al. The transcription factor GABPA is required for nuclear reprogramming and maintenance of the TERT promoter in melanoma. Mol Cell. 2015;57(5):807–818.",
   "Stern JL, et al. Mutation of the TERT promoter, switch to active chromatin and monoallelic TERT expression in multiple cancers. Genes Dev. 2015;29(21):2219–2224.",
   "Avsec Ž, et al. Advancing regulatory variant effect prediction with AlphaGenome. Nature. 2026. Published 28 January 2026.",
@@ -24,7 +24,7 @@ const references = [
   "Hu J, et al. Antitelomerase therapy provokes ALT and mitochondrial adaptive mechanisms in cancer. Cell. 2012;148(4):651–663.",
   "Bushweller JH. Targeting transcription factors in cancer — from undruggable to reality. Nat Rev Cancer. 2019;19(11):611–624.",
   "Békés M, Langley DR, Crews CM. PROTAC targeted protein degraders: the past is prologue. Nat Rev Drug Discov. 2022;21(3):181–200.",
-  "Rosmarin AG, et al. GA-binding protein transcription factor: a review of GABP as an integrator of intracellular signaling and protein–protein interactions. Blood Cells Mol Dis. 2004;32(1):143–154.",
+  "Nassiri F, et al. Detection and discrimination of intracranial tumors using plasma cell-free DNA methylomes. Nat Med. 2020;26(7):1044–1047.",
   "Nassiri F, et al. Detection and discrimination of intracranial tumors using plasma cell-free DNA methylomes. Nat Med. 2023;29(4):930–939.",
 ]
 

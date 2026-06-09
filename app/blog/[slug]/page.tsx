@@ -173,7 +173,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
           </div>
           <h1 className="typography-page-title">{post.title}</h1>
-          <p className="typography-body mb-6">{post.description}</p>
           
           {/* Meta Information */}
           <div className="typography-meta flex flex-wrap items-center gap-6 mb-6 pb-6 border-b border-border">
@@ -204,6 +203,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           )}
         </header>
+
+        {post.description ? (
+          <p className="typography-body mb-8 -mt-2">{post.description}</p>
+        ) : null}
 
         {/* Featured Image (skipped when hideHeroImage: figure lives in article body only) */}
         {post.image && !post.hideHeroImage && (

@@ -52,7 +52,7 @@ export default function Hero() {
             }`}
           >
             <p className="typography-body">
-              20 years turning biological data into medical breakthroughs. Currently the lead developer on
+              20 years at the intersection of machine learning and genomics research. Currently the lead developer on
               multi-million dollar metabolic research at UC San Diego.
             </p>
             <p className="typography-body">
@@ -92,6 +92,14 @@ export default function Hero() {
               className="btn-glass"
             >
               GitHub
+            </a>
+            <a
+              href="https://www.instagram.com/parulk08"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-glass"
+            >
+              Instagram
             </a>
           </div>
         </div>

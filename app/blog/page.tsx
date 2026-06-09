@@ -35,28 +35,26 @@ export default function BlogPage() {
         {/* Blog Posts Grid */}
         {posts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {posts.map((post) => {
-              const coverImage = (post as unknown as { coverImage?: string }).coverImage
-              return (
+            {posts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
                 <Card className="h-full flex flex-col hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                   {post.slug === ALPHAGENOME_PART1_SLUG ? (
-                    <div className="relative h-48 w-full overflow-hidden border-b border-border bg-gradient-to-b from-muted/50 to-background">
+                    <div className="relative h-32 w-full overflow-hidden border-b border-border bg-gradient-to-b from-muted/50 to-background">
                       <div
                         className="pointer-events-none absolute left-1/2 top-1/2 w-max"
-                        style={{ transform: "translate(-50%, -50%) scale(0.5)" }}
+                        style={{ transform: "translate(-50%, -50%) scale(0.38)" }}
                         aria-hidden
                       >
                         <CnnDnaAnimation variant="card" />
                       </div>
                     </div>
                   ) : (
-                    coverImage && (
-                      <div className="w-full h-48 overflow-hidden">
+                    post.image && (
+                      <div className="w-full h-32 overflow-hidden border-b border-border bg-muted/30">
                         <img
-                          src={coverImage}
+                          src={post.image}
                           alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                     )
@@ -121,8 +119,7 @@ export default function BlogPage() {
                   </CardContent>
                 </Card>
               </Link>
-              )
-            })}
+            ))}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">

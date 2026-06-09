@@ -16,8 +16,9 @@ export default function ArtGallery() {
     { title: "Swiss Riviera", src: "/swiss-riviera-landscape-painting.png" },
     { title: "Grecian Dreams", src: "/grecian-dreams-classical-art.jpg" },
     { title: "California Wine", src: "/california-wine-country-painting.jpg" },
-    { title: "Lavande en Provence", src: "/lavande-en-provence-lavender-fields.jpg" },
     { title: "Colors", src: "/abstract-color-composition-art.jpg" },
+    { title: "Thar Desert, India", src: "/thar-desert-india.png" },
+    { title: "Lavande en Provence", src: "/lavande-en-provence-lavender-fields.jpg" },
   ]
 
   return (
@@ -49,25 +50,21 @@ export default function ArtGallery() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {artworks.map((artwork, index) => (
             <div
-              key={index}
+              key={artwork.title}
               className="group relative rounded-lg overflow-hidden border border-border hover:border-accent transition-all duration-300 cursor-pointer bg-background"
               onClick={() => setSelectedImage(index)}
             >
-              {/* Image Container */}
-              <div className="relative w-full min-h-[300px] flex items-center justify-center overflow-hidden bg-background">
+              <div className="relative w-full aspect-[4/5] overflow-hidden bg-muted/20">
                 <img
                   src={artwork.src || "/placeholder.svg"}
                   alt={artwork.title}
-                  className="w-full h-auto max-h-[600px] object-contain group-hover:scale-105 transition-transform duration-500"
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
 
-                {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-start p-6 pointer-events-none">
-                  <div>
-                    <p className="typography-content-title text-foreground" role="heading" aria-level={3}>
-                      {artwork.title}
-                    </p>
-                  </div>
+                  <p className="typography-content-title text-foreground" role="heading" aria-level={3}>
+                    {artwork.title}
+                  </p>
                 </div>
               </div>
             </div>

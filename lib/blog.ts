@@ -26,6 +26,20 @@ function readBlogMarkdown(fileName: string): string {
 // Sample blog posts, in production, you might load these from markdown files or a CMS
 export const blogPosts: BlogPost[] = [
   {
+    slug: "the-stories-that-hold-you-upright",
+    title: "The Stories That Hold You Upright",
+    description:
+      "Four books. Centuries apart. The same framework for navigating a world that won't stop moving.",
+    date: "2026-06-07",
+    author: "Parul Kudtarkar",
+    category: "Personal",
+    tags: ["Reading", "Stories", "Books", "Reflection"],
+    image: "/images/fathers-toolkit/toolkit-books.png",
+    content: readBlogMarkdown("he-wasnt-telling-me-stories.md"),
+    readingTime: 14,
+    featured: true,
+  },
+  {
     slug: "understanding-alphagenome-part-1-biology-problem",
     title: "Understanding AlphaGenome, Part 1: The Biology and the Problem",
     description:
